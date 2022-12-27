@@ -124,11 +124,10 @@ steps:
     displayName: 'Create Installer'
 
 
-  - task: CopyFilesOverSSH@0
+  
+  - task: PublishPipelineArtifact@1
     inputs:
-      sshEndpoint: 'Binary Storage'
-      sourceFolder: '$(Build.Repository.LocalPath)/pkg'
-      contents: '*'
-      targetFolder: '$(BINARIES_DIR)/v1-core-$(buildType)/$(SYNERGY_VERSION)/$(SYNERGY_VERSION_STAGE)/b$(SYNERGY_VERSION_BUILD)-$(SYNERGY_REVISION)/'
-      readyTimeout: '20000'
-    displayName: 'Send package to Binary Storage'
+      targetPath: '$(Build.Repository.LocalPath)/pkg'
+      artifactType: 'pipeline'
+      artifactName: 'macos'
+    displayName: 'Send macos package to Binary Storage'

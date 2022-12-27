@@ -195,31 +195,25 @@ steps:
       $(Build.Repository.LocalPath)\ext\openssl\windows\x64\bin\openssl.exe sha256 %FILENAME% >> %FILENAME%.checksum.txt
     displayName: "Rename files"
 
-  - task: CopyFilesOverSSH@0
-    inputs:
-      sshEndpoint: 'Binary Storage'
-      sourceFolder: '$(Build.ArtifactStagingDirectory)/'
-      contents: '*.zip'
-      targetFolder: '$(BINARIES_DIR)/v1-core-$(buildType)/$(SYNERGY_VERSION)/$(SYNERGY_VERSION_STAGE)/b$(SYNERGY_VERSION_BUILD)-$(SYNERGY_REVISION)/'
-      readyTimeout: '20000'
-    displayName: 'Send archives to Binary Storage'
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  - task: CopyFilesOverSSH@0
+ - task: PublishPipelineArtifact@1
     inputs:
-      sshEndpoint: 'Binary Storage'
-      sourceFolder: '$(Build.Repository.LocalPath)\build32\installer\bin\Release\'
-      contents: '*'
-      targetFolder: '$(BINARIES_DIR)/v1-core-$(buildType)/$(SYNERGY_VERSION)/$(SYNERGY_VERSION_STAGE)/b$(SYNERGY_VERSION_BUILD)-$(SYNERGY_REVISION)/'
-      readyTimeout: '20000'
+      targetPath: '*.zip'
+      artifactType: 'pipeline'
+      artifactName: 'win-bin'
+    displayName: 'Send binaries  to Binary Storage'
+
+ - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.Repository.LocalPath)\build32\installer\bin\Release\'
+      artifactType: 'pipeline'
+      artifactName: 'win-x86'
     displayName: 'Send x86 package to Binary Storage'
 
 
-  - task: CopyFilesOverSSH@0
+  - task: PublishPipelineArtifact@1
     inputs:
-      sshEndpoint: 'Binary Storage'
-      sourceFolder: '$(Build.Repository.LocalPath)\build64\installer\bin\Release\'
-      contents: '*'
-      targetFolder: '$(BINARIES_DIR)/v1-core-$(buildType)/$(SYNERGY_VERSION)/$(SYNERGY_VERSION_STAGE)/b$(SYNERGY_VERSION_BUILD)-$(SYNERGY_REVISION)/'
-      readyTimeout: '20000'
+      targetPath: '$(Build.Repository.LocalPath)\build64\installer\bin\Release\'
+      artifactType: 'pipeline'
+      artifactName: 'win-x64'
     displayName: 'Send x64 package to Binary Storage'
