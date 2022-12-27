@@ -91,16 +91,6 @@ steps:
     env:
       GIT_COMMIT: $(Build.SourceVersion)
 
-  - task: CmdLine@2
-    inputs:
-      script: |
-        export PATH="$(Qt5_DIR)/bin:$PATH"
-        macdeployqt $(Build.Repository.LocalPath)/build/bundle/Synergy.app -codesign="$CODESIGN_ID"
-        codesign -f --options runtime --deep -s "$CODESIGN_ID" $(Build.Repository.LocalPath)/build/bundle/Synergy.app
-        ln -s /Applications $(Build.Repository.LocalPath)/build/bundle/Applications
-    displayName: 'Signing'
-    env:
-      CODESIGN_ID: "Developer ID Application: Symless Ltd (4HX897Y6GJ)"
 
   - script: |
       . ./build/version
@@ -133,14 +123,6 @@ steps:
         shasum -a 256 $(SYNERGY_DMG_FILENAME) >> $(SYNERGY_DMG_FILENAME).checksum.txt
     displayName: 'Create Installer'
 
-  - task: Bash@3
-    inputs:
-      filePath: 'CI/MacOS/notorize.sh'
-      workingDirectory: 'pkg/'
-    env:
-      ASC_USERNAME: $(ASC_USERNAME)
-      NOTORY_APP_PASSWORD: $(NOTORY_APP_PASSWORD)
-    displayName: 'Submit for Notarization'
 
   - task: CopyFilesOverSSH@0
     inputs:
