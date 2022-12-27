@@ -1,10 +1,4 @@
 steps:
-  - task: InstallAppleCertificate@2
-    inputs:
-      certSecureFile: 'AppleSigningCert.cer'
-      certPwd: '$(AppleCertPass)'
-      keychain: 'temp'
-
   - task: CmdLine@2
     inputs:
       script: | 
