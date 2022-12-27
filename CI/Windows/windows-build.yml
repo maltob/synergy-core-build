@@ -196,14 +196,14 @@ steps:
     displayName: "Rename files"
 
 
- - task: PublishPipelineArtifact@1
+  - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '*.zip'
       artifactType: 'pipeline'
       artifactName: 'win-bin'
     displayName: 'Send binaries  to Binary Storage'
 
- - task: PublishPipelineArtifact@1
+  - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(Build.Repository.LocalPath)\build32\installer\bin\Release\'
       artifactType: 'pipeline'
